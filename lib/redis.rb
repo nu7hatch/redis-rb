@@ -20,13 +20,15 @@ class Redis
 
     require "uri"
 
-    url = URI(options.delete(:url) || ENV["REDIS_URL"] || "redis://127.0.0.1:6379/0")
+    if url = options.delete(:url)
+      url = URI(url || ENV["REDIS_URL"] || "redis://127.0.0.1:6379/0")
 
-    options[:host]     = url.host
-    options[:port]     = url.port
-    options[:password] = url.password
-    options[:db]       = url.path[1..-1].to_i
-
+      options[:host]     = url.host
+      options[:port]     = url.port
+      options[:password] = url.password
+      options[:db]       = url.path[1..-1].to_i
+    end
+    
     new(options)
   end
 
